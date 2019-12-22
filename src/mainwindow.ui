@@ -409,13 +409,13 @@
                 <enum>QAbstractSpinBox::UpDownArrows</enum>
                </property>
                <property name="decimals">
-                <number>5</number>
+                <number>9</number>
                </property>
                <property name="minimum">
-                <double>-1.000000000000000</double>
+                <double>-1000.000000000000000</double>
                </property>
                <property name="maximum">
-                <double>1.000000000000000</double>
+                <double>1000.000000000000000</double>
                </property>
                <property name="singleStep">
                 <double>0.020000000000000</double>
@@ -428,13 +428,13 @@
              <item row="1" column="1">
               <widget class="QDoubleSpinBox" name="doubleSpinBoxConstImaginalis">
                <property name="decimals">
-                <number>5</number>
+                <number>9</number>
                </property>
                <property name="minimum">
-                <double>-1.000000000000000</double>
+                <double>-1000.000000000000000</double>
                </property>
                <property name="maximum">
-                <double>1.000000000000000</double>
+                <double>1000.000000000000000</double>
                </property>
                <property name="singleStep">
                 <double>0.020000000000000</double>

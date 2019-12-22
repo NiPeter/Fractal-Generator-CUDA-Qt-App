@@ -6,7 +6,7 @@
 FractalGraphicsView::FractalGraphicsView(QWidget *parent)
   : FractalGraphicsView::QGraphicsView(parent),
   numScheduledScalings_(0),
-  zoomAnimationTime_(500) {
+  zoomAnimationTime_(250) {
 }
 
 void FractalGraphicsView::setZoomAnimationTime(int duration_ms) {
@@ -23,7 +23,7 @@ void FractalGraphicsView::wheelEvent(QWheelEvent *event) {
     numScheduledScalings_ = numSteps;
 
   QTimeLine *animation = new QTimeLine(zoomAnimationTime_, this);
-  animation->setUpdateInterval(20);
+  animation->setUpdateInterval(10);
   connect(animation, &QTimeLine::valueChanged, this, &FractalGraphicsView::scalingAnimationStep);
   connect(animation, &QTimeLine::finished, this, &FractalGraphicsView::scalingAnimationFinished);
   animation->start();

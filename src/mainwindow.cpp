@@ -4,7 +4,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
-  ui(new Ui::MainWindow) {
+  ui(new Ui::MainWindow),
+  generator_thread(nullptr) {
   ui->setupUi(this);
 
   ui->pushButtonGenerate->setEnabled(!ui->checkBoxAutoGenerate->isChecked());
@@ -18,18 +19,6 @@ MainWindow::MainWindow(QWidget *parent) :
   setZoom(ui->doubleSpinBoxZoom->value()).
   setWidth(static_cast<unsigned int>(ui->spinBoxResolutionX->value())).
   setHeight(static_cast<unsigned int>(ui->spinBoxResolutionY->value()));
-
-
-//  auto fractal = gen.setZoom(1.0).generate();
-//  auto img = fractal->get_image();
-
-//  image = image.fromData(img.get(), static_cast<int>(fractal->get_size()));
-
-
-//  scene->addPixmap(QPixmap::fromImage(image));
-//  scene->setSceneRect(image.rect());
-//  ui->graphicsView->setScene(scene);
-//  ui->
 }
 
 MainWindow::~MainWindow() {
@@ -37,18 +26,7 @@ MainWindow::~MainWindow() {
   delete scene;
 }
 
-void MainWindow::on_checkBoxAutoGenerate_clicked(bool checked) {
-  ui->pushButtonGenerate->setEnabled(!checked);
-}
-
-void MainWindow::on_pushButtonGenerate_clicked() {
-  generate_fractal();
-}
-
-void MainWindow::generate_fractal() {
-//  generator.;
-
-  auto fractal = generator.generate();
+void MainWindow::handleFractalResults(std::shared_ptr<bitmap_image> fractal) {
   auto raw_image = fractal->get_image();
 
   image = image.fromData(raw_image.get(), static_cast<int>(fractal->get_size()));
@@ -58,6 +36,23 @@ void MainWindow::generate_fractal() {
   scene->setSceneRect(image.rect());
   ui->graphicsView->setScene(scene);
   ui->graphicsView->fitInView(image.rect(), Qt::KeepAspectRatio);
+
+  ui->labelGenerateTime->setText(QString::number(generator_thread->lastGenerateDurationMs()));
+
+  delete generator_thread;
+  generator_thread = nullptr;
+}
+
+void MainWindow::on_checkBoxAutoGenerate_clicked(bool checked) {
+  ui->pushButtonGenerate->setEnabled(!checked);
+}
+
+void MainWindow::on_pushButtonGenerate_clicked() {
+  if (generator_thread) return;
+
+  generator_thread = new FractalWorker(&generator, this);
+  connect(generator_thread, &FractalWorker::fractalReady, this, &MainWindow::handleFractalResults);
+  generator_thread->start();
 }
 
 void MainWindow::on_doubleSpinBoxZoom_valueChanged(double arg1) {

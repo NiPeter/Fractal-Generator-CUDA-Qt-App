@@ -18,6 +18,7 @@ SET(SOURCES
     src/main.cpp
     src/mainwindow.cpp
     src/fractalgraphicsview.cpp
+    src/fractalworker.cpp
 )
 
 SET(UIS
@@ -28,6 +29,7 @@ SET(INCLUDES
     include/mainwindow.h
     include/julia_set_generator.h
     include/fractalgraphicsview.h
+    include/fractalworker.h
     )
 
 add_executable(${PROJECT_NAME}

@@ -6,6 +6,10 @@
 #include <QDoubleValidator>
 #include <fractalgraphicsview.h>
 #include <julia_set_generator.h>
+#include <fractalworker.h>
+
+Q_DECLARE_METATYPE(std::shared_ptr<bitmap_image>);
+
 
 namespace Ui {
 class MainWindow;
@@ -47,9 +51,10 @@ class MainWindow : public QMainWindow {
     QImage image;
     QGraphicsScene *scene;
     JuliaSetGenerator generator;
+    FractalWorker *generator_thread;
 
-
-    void generate_fractal();
+  private slots:
+    void handleFractalResults(std::shared_ptr<bitmap_image> fractal);
 };
 
 #endif // MAINWINDOW_H
